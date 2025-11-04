@@ -1,0 +1,485 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OAD API",
+    "version": "1.0.0",
+    "description": "## Web API\nRetrieve behavioral insights, candidate analytics, and team performance data.\n\nThe OAD.ai Web API enables the creation of applications that can access organizational analytics, manage teams and candidates, and monitor credit usage — all through secure, token-based endpoints.\n\n## Getting Started\n\n**Base URL**  \n```\nhttps://app.oad.ai/api/app/v1/oad\n```\n\n## Authentication\nAll requests require Bearer Token authorization.  \nInclude your token in the `Authorization` header of each request:\n\n```\nAuthorization: Bearer <your_api_token>\n```\n\nRequests without a valid token will return `401 Unauthorized`.\n\n\n## Obtaining an API Token\n- API tokens can be generated from your OAD.ai admin dashboard under **Settings → Integration → Generate Token**. \n- Tokens are tied to your organization account and must be kept secure.\n\n## Example Request\n```\ncurl -X GET \"https://app.oad.ai/api/app/v1/oadteam/info\" \\\n-H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example_signature\"\n```\n\n ## Rate Limits\n- Each API key allows **60 requests per minute** per organization.  \n- Exceeding this limit will result in a `429 Too Many Requests` error.  \n- Rate-limit details are returned in response headers:\n- Use efficient caching and batch requests to stay within the rate window."
+  },
+  "servers": [
+    {
+      "url": "https://app.oad.ai/api/app/v1/oad",
+      "description": "Base URL"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Team Management"
+    },
+    {
+      "name": "Candidate Management"
+    },
+    {
+      "name": "Billing"
+    }
+  ],
+  "components": {
+    "parameters": {
+      "AuthorizationHeader": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "description": "Bearer token used for authentication.",
+        "schema": {
+          "type": "string",
+          "example": "Bearer V5uVavKInwpHDC6ZRZsHaWh7jkcyZ389CvINcpUCjx1EgywJofePogq7cnsxr4Ft"
+        }
+      }
+    },
+    "schemas": {
+      "TeamInfo": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "uuid": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          }
+        }
+      },
+      "TeamMember": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "member_id": {
+                  "type": "string"
+                },
+                "survey_id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "full_name": {
+                  "type": "string"
+                },
+                "team_id": {
+                  "type": "string"
+                },
+                "team_name": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "report_link": {
+                  "type": "string"
+                },
+                "status_label": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          }
+        }
+      },
+      "Candidate": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "member_id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "full_name": {
+                  "type": "string"
+                },
+                "team_id": {
+                  "type": "string"
+                },
+                "team_name": {
+                  "type": "string"
+                },
+                "report_link": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          }
+        }
+      },
+      "BillingCredits": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "company_id": {
+                  "type": "string"
+                },
+                "company_name": {
+                  "type": "string"
+                },
+                "credit_available": {
+                  "type": "integer"
+                },
+                "credit_used": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/teams": {
+      "get": {
+        "tags": [
+          "Team Management"
+        ],
+        "summary": "Get Teams",
+        "description": "Retrieve all teams associated with the authenticated account.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamInfo"
+                },
+                "examples": {
+                  "example-1": {
+                    "summary": "Example response",
+                    "value": {
+                      "data": [
+                        {
+                          "id": 1,
+                          "name": "My First Team",
+                          "uuid": "2aeb6440-ede2-45a6-adce-683f00dd605c",
+                          "url": "https://app.oad.ai/team/2aeb6440-ede2-45a6-adce-683f00dd605c/show"
+                        },
+                        {
+                          "id": 2,
+                          "name": "My Second Team",
+                          "uuid": "2aeb6440-ede2-45a6-adce-123f00dd605c",
+                          "url": "https://app.oad.ai/team/2aeb6440-ede2-45a6-adce-123f00dd605c/show"
+                        }
+                      ],
+                      "message": "Team users retrieved successfully",
+                      "code": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "error-example": {
+                    "value": {
+                      "error": "unauthenticated."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/team/{team_id}/members": {
+      "get": {
+        "tags": [
+          "Team Management"
+        ],
+        "summary": "Get Team Members",
+        "description": "Retrieve list of team members for a specific team.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          },
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier for the team.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamMember"
+                },
+                "examples": {
+                  "example-1": {
+                    "summary": "Example response",
+                    "value": {
+                      "data": [
+                        {
+                          "member_id": "11,",
+                          "survey_id": "null,",
+                          "email": "joe@oadllc.com",
+                          "full_name": "Joe Rogan",
+                          "team_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
+                          "team_name": "Team 1",
+                          "status": null,
+                          "report_link": null,
+                          "status_label": ""
+                        },
+                        {
+                          "member_id": "12,",
+                          "survey_id": "163,",
+                          "email": "zoe@oadllc.com",
+                          "full_name": "Zoe\tMacDonald",
+                          "team_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
+                          "team_name": "Team 1",
+                          "status": "adaptive_to_job",
+                          "report_link": "https://app.oad.ai/team/294185b9-14dd-4ab4-b488-dcc8fc00a2d/team/12/163/survey",
+                          "status_label": "Adapting to the Job"
+                        }
+                      ],
+                      "message": "Team users retrieved successfully",
+                      "code": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "error-example": {
+                    "value": {
+                      "error": "unauthenticated"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/candidates": {
+      "get": {
+        "tags": [
+          "Candidate Management"
+        ],
+        "summary": "Get Candidates",
+        "description": "Retrieve all candidates associated with the authenticated account.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Candidate"
+                },
+                "examples": {
+                  "example-1": {
+                    "summary": "Example response",
+                    "value": {
+                      "data": [
+                        {
+                          "member_id": "11,",
+                          "email": "joe@oadllc.com",
+                          "full_name": "Joe Rogan",
+                          "team_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
+                          "team_name": "Team 1",
+                          "report_link": null,
+                          "score": null
+                        },
+                        {
+                          "member_id": "12,",
+                          "email": "zoe@oadllc.com",
+                          "full_name": "Zoe\tMacDonald",
+                          "team_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
+                          "team_name": "Team 1",
+                          "report_link": "https://app.useoad.com/hiring/294185b9-14dd-4ab4-b488-dcc8fc00a2d/team/12/135/survey",
+                          "score": 63
+                        }
+                      ],
+                      "message": "Candidate users retrieved successfully",
+                      "code": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "error-example": {
+                    "value": {
+                      "error": "unauthenticated."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/billing/credits": {
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Get Billing Credits",
+        "description": "Retrieve remaining billing credits for the authenticated account.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthorizationHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingCredits"
+                },
+                "examples": {
+                  "example-1": {
+                    "summary": "Example response",
+                    "value": {
+                      "data": [
+                        {
+                          "company_id": "1,",
+                          "company_name": "OAD",
+                          "credit_available": "336",
+                          "credit_used": "64"
+                        }
+                      ],
+                      "message": "Billing info retrieved successfully",
+                      "code": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "error-example": {
+                    "value": {
+                      "error": "unauthenticated."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
