@@ -133,16 +133,19 @@
                 "full_name": {
                   "type": "string"
                 },
-                "team_id": {
+                "job_id": {
                   "type": "string"
                 },
-                "team_name": {
+                "job_name": {
                   "type": "string"
                 },
                 "report_link": {
                   "type": "string"
                 },
                 "score": {
+                  "type": "string"
+                },
+                "department_name": {
                   "type": "string"
                 }
               }
@@ -378,19 +381,21 @@
                           "member_id": "11,",
                           "email": "joe@oadllc.com",
                           "full_name": "Joe Rogan",
-                          "team_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
-                          "team_name": "Team 1",
+                          "job_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
+                          "job_name": "sales manager",
                           "report_link": null,
-                          "score": null
+                          "score": null,
+                          "department_name": "sales"
                         },
                         {
                           "member_id": "12,",
                           "email": "zoe@oadllc.com",
                           "full_name": "Zoe\tMacDonald",
-                          "team_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
-                          "team_name": "Team 1",
+                          "job_id": "294185b9-14dd-4ab4-b488-dcc8fc00a2d",
+                          "job_name": "marketing manager",
                           "report_link": "https://app.useoad.com/hiring/294185b9-14dd-4ab4-b488-dcc8fc00a2d/team/12/135/survey",
-                          "score": 63
+                          "score": 63,
+                          "department_name": "marketing"
                         }
                       ],
                       "message": "Candidates retrieved successfully",
