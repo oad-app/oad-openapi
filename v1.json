@@ -236,7 +236,7 @@
                           "url": "https://app.oad.ai/team/2aeb6440-ede2-45a6-adce-123f00dd605c/show"
                         }
                       ],
-                      "message": "Team users retrieved successfully",
+                      "message": "Teams retrieved successfully",
                       "code": 200
                     }
                   }
@@ -321,7 +321,7 @@
                           "status_label": "Adapting to the Job"
                         }
                       ],
-                      "message": "Team users retrieved successfully",
+                      "message": "Team Members retrieved successfully",
                       "code": 200
                     }
                   }
@@ -393,7 +393,7 @@
                           "score": 63
                         }
                       ],
-                      "message": "Candidate users retrieved successfully",
+                      "message": "Candidates retrieved successfully",
                       "code": 200
                     }
                   }
